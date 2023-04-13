@@ -5,7 +5,10 @@ import {Person} from '../types/Person';
 
 const getAllPeople = async (req: Request, res: Response) => {
   try {
-    const person: Person[] = await PersonModel.find();
+
+    const queryObj = req.query;
+    console.log(queryObj);
+    const person: Person[] = await PersonModel.find(queryObj);
     res.status(200).json({
       status: 'success',
       data: person,

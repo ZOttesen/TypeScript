@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Review from "./reviewModel";
 
 const PersonSchema = new mongoose.Schema({
   name: {
@@ -26,7 +27,14 @@ const PersonSchema = new mongoose.Schema({
     default: Date.now,
     select: false,
   },
+  reviews: Array
 });
+
+PersonSchema.pre('save', async function (){
+  const reviewsPromises = this.reviews.map(id => Review.findById(id));
+  this.reviews = await Promise.all(reviewsPromises);
+})
+
 
 const PersonModel = mongoose.model("Person", PersonSchema);
 
